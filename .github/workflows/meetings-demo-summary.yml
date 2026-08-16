@@ -1,8 +1,9 @@
 name: Meetings and Demo Summary
 
-on:
+"on":
   schedule:
     - cron: "0 17 * * *"
+
   workflow_dispatch:
 
 jobs:
@@ -27,7 +28,7 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: |
-          echo "$GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT" > service-account.json
+          printf '%s' "$GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT" > service-account.json
 
       - name: Run Meetings and Demo Automation
         env:
