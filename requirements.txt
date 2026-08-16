@@ -1,0 +1,11 @@
+pandas
+pytz
+gspread
+requests
+pymupdf
+pillow
+slack_sdk
+oauth2client
+google-api-python-client
+gspread-formatting
+python-dotenv
