@@ -2,16 +2,15 @@ name: Meetings and Demo Summary
 
 on:
   schedule:
-    # 05:30 UTC = 11:00 AM IST (UTC+5:30), every day except Monday
-    # Cron day-of-week: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
-    - cron: "30 5 * * 0,2,3,4,5,6"
-  workflow_dispatch: {}   # lets you manually trigger a run from the Actions tab
+    - cron: "0 17 * * *"
+  workflow_dispatch:
 
 jobs:
-  send-summary:
+  run-script:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -21,20 +20,21 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pandas pytz gspread requests pymupdf pillow slack_sdk \
-                      oauth2client google-api-python-client gspread-formatting \
-                      python-dotenv
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Write Google service account key to file
-        run: echo "$GOOGLE_SERVICE_ACCOUNT_JSON" > service_account.json
+      - name: Create Google Service Account file
         env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          echo "$GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT" > service-account.json
 
-      - name: Run Meetings and Demo summary
+      - name: Run Meetings and Demo Automation
         env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: service_account.json
+          GOOGLE_SERVICE_ACCOUNT_JSON: service-account.json
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
-        run: python Meetings_and_Demo1.py
+        run: |
+          python Meetings_and_Demo1.py
