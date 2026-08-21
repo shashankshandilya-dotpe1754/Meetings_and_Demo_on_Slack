@@ -466,7 +466,7 @@ try:
     # B5:P7 = title/date/column-header rows (may contain merged cells);
     # from row 8 on, keep only rows whose Email column (B) is non-blank —
     # trims the trailing blank rows below the actual data.
-    last_row = last_filled_data_row(ws, "B5", "P30", header_rows=3, key_col_offset=0)
+    last_row = last_filled_data_row(ws, "B5", "R30", header_rows=3, key_col_offset=0)
     range_a1 = f"B5:P{last_row}"
 
     spreadsheet_id = "1jO7PQshTrzZ-2cfq6U-a--2uTBI0zI7VjSxrwVdcumI"
